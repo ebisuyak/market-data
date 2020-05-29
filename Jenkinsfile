@@ -25,6 +25,13 @@ withPod {
 					step([$class: 'JUnitResultArchiver', testResults: 'results.xml'])
 				}
 			}
+			def tagToDeploy = "ebisuyak/${service}"
+			stage('Publish') {
+				withDockerRegistry(registry: [credentialsId: 'dockerhub']) {
+					sh("docker tag ${service} ${tagToDeploy}")
+					sh("docker push ${tagToDeploy}")
+				}
+			}
 		}
 	}
 }
