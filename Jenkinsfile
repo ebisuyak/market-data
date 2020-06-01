@@ -35,6 +35,7 @@ withPod {
 			stage('Deploy') {
 				sh("sed -i.bak 's#BUILD_TAG#${tagToDeploy}#' ./deploy/staging/*.yml")
 				container('kubectl') {
+					sh("cat ./deploy/staging/market-data.yml")
 					sh("kubectl apply  --namespace=staging -f ./deploy/staging")
 				}
 			}
