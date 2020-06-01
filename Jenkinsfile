@@ -1,5 +1,5 @@
 def withPod(body) {
-	podTemplate(label: 'pod', serviceAccount: 'jenkins', namespace: 'jenkins', containers: [
+	podTemplate(label: 'pod', serviceAccount: 'jenkins', containers: [
 		containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
 		containerTemplate(name: 'kubectl', image: 'ebisuyak/kubectl:v1.18.2', command: 'cat', ttyEnabled: true)
 	],
@@ -35,6 +35,7 @@ withPod {
 			stage('Deploy') {
 				sh("sed -i.bak 's#BUILD_TAG#${tagToDeploy}#' ./deploy/staging/*.yml")
 				container('kubectl') {
+					sh("kubectl config set-context --current --namespace=jenkins")
 					sh("kubectl get pod -A")
 					sh("kubectl apply  --namespace=staging -f ./deploy/staging")
 				}
