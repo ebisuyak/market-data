@@ -1,7 +1,7 @@
 def withPod(body) {
 	podTemplate(label: 'pod', serviceAccount: 'jenkins', containers: [
 		containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
-		containerTemplate(name: 'kubectl', image: 'morganjbruce/kubectl', command: 'cat', ttyEnabled: true)
+		containerTemplate(name: 'kubectl', image: 'ebisuyak/kubectl:v1.18.2', command: 'cat', ttyEnabled: true)
 	],
 	volumes: [
 		hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -35,7 +35,6 @@ withPod {
 			stage('Deploy') {
 				sh("sed -i.bak 's#BUILD_TAG#${tagToDeploy}#' ./deploy/staging/*.yml")
 				container('kubectl') {
-					sh("cat ./deploy/staging/market-data.yml")
 					sh("kubectl apply  --namespace=staging -f ./deploy/staging")
 				}
 			}
