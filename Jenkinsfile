@@ -35,7 +35,6 @@ withPod {
 			stage('Deploy') {
 				sh("sed -i.bak 's#BUILD_TAG#${tagToDeploy}#' ./deploy/staging/*.yml")
 				container('kubectl') {
-					sh("kubectl config set-context --current --namespace=jenkins")
 					sh("kubectl get pod -A")
 					sh("kubectl apply  --namespace=staging -f ./deploy/staging")
 				}
