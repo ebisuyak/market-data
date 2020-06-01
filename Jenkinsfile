@@ -1,5 +1,5 @@
 def withPod(body) {
-	podTemplate(label: 'pod', serviceAccount: 'jenkins', containers: [
+	podTemplate(label: 'pod', serviceAccount: 'jenkins', namespace: 'jenkins', containers: [
 		containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
 		containerTemplate(name: 'kubectl', image: 'ebisuyak/kubectl:v1.18.2', command: 'cat', ttyEnabled: true)
 	],
